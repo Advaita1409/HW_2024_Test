@@ -1,22 +1,32 @@
 using UnityEngine;
 
-public class DoofusController : MonoBehaviour
+public class Doofus : MonoBehaviour
 {
-    public float moveSpeed;
+    public float speed = 3.0f;
+
     private Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        moveSpeed = GameManager.Instance.doofusSpeed;
     }
 
     void Update()
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        rb.AddForce(movement * moveSpeed);
+        Vector3 movement = new Vector3(horizontalInput, 0, verticalInput);
+
+        rb.AddForce(movement * speed);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Pulpit"))
+        {
+            // Update score
+            GameManager.instance.UpdateScore();
+        }
     }
 }

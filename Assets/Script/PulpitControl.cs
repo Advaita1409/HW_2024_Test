@@ -1,19 +1,26 @@
 using UnityEngine;
-using System.Collections;
-
-public class PulpitController : MonoBehaviour
+public class Pulpit : MonoBehaviour
 {
-    private float lifeTime;
+    public float destroyTime = 5.0f;
 
-    public void SetLifeTime(float time)
+    private float timer = 0.0f;
+
+    void Update()
     {
-        lifeTime = time;
-        StartCoroutine(DestroyAfterLifetime());
+        timer += Time.deltaTime;
+
+        if (timer >= destroyTime)
+        {
+            Destroy(gameObject);
+        }
     }
 
-    IEnumerator DestroyAfterLifetime()
+    void OnCollisionEnter(Collision collision)
     {
-        yield return new WaitForSeconds(lifeTime);
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("Doofus"))
+        {
+            // Update score
+            GameManager.instance.UpdateScore();
+        }
     }
 }
